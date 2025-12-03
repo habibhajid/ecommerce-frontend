@@ -43,7 +43,7 @@
                     </button>
 
                     <!-- Menu Dropdown Profil -->
-                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 hidden animate-fade-in-down">
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 hidden">
                         <div class="py-2">
                             <a href="{{ url('/api/admin/profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">
                                 Pengaturan Profil

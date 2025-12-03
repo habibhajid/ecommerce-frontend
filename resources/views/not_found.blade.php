@@ -6,7 +6,8 @@
     <title>{{ $settings['app_name'] ?? 'Chatalog' }} - Halaman Tidak Ditemukan</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,7 +21,7 @@
             <h1 class="text-6xl font-bold text-orange-500 mb-4">404</h1>
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Halaman Tidak Ditemukan</h2>
             <p class="text-gray-600 mb-8">Maaf, halaman yang Anda cari tidak dapat ditemukan.</p>
-            <a href="/home" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-md transition-colors">
+            <a href="/home" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-md">
                 Kembali ke Beranda
             </a>
         </div>

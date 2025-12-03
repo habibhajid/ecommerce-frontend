@@ -7,22 +7,17 @@
     <title>{{ $settings['app_name'] ?? 'Chatalog' }} - Katalog Produk</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- AOS Animation CSS Removed -->
 
     <style>
-        .animate-slide-in-up {
-            animation: slideInUp 0.5s ease-out;
-        }
-        @keyframes slideInUp {
-            from { transform: translate(-50%, 100%); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
+        /* Animations removed */
     </style>
 </head>
 <body class="bg-white">
@@ -32,10 +27,10 @@
     <!-- Header Section -->
     <div class="bg-orange-50 py-12 text-black text-center">
         <div class="container mx-auto px-4 max-w-screen-xl">
-            <h1 class="text-4xl font-bold" data-aos="fade-down">
+            <h1 class="text-4xl font-bold">
                 Katalog Produk
             </h1>
-            <p class="mt-2 text-lg" data-aos="fade-up" data-aos-delay="100">
+            <p class="mt-2 text-lg">
                 Temukan dan pilih produk favorit Anda.
             </p>
         </div>
@@ -43,7 +38,7 @@
 
     <div class="container mx-auto px-4 py-12 max-w-screen-xl min-h-screen">
         <!-- Search Bar -->
-        <div class="mb-8" data-aos="fade-down" data-aos-delay="200">
+        <div class="mb-8">
             <input
                 type="text"
                 id="search-input"
@@ -57,7 +52,7 @@
         <div class="flex justify-center">
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 w-full">
                 @foreach($products as $index => $product)
-                    <div class="product-item" data-name="{{ strtolower($product->name) }}" data-aos="zoom-in" data-aos-delay="{{ $index * 50 }}" data-aos-duration="600">
+                    <div class="product-item" data-name="{{ strtolower($product['name']) }}">
                         <x-product-card :product="$product" />
                     </div>
                 @endforeach
@@ -68,7 +63,7 @@
         </div>
 
         <!-- Cart Floating Button -->
-        <div id="cart-float-btn" onclick="openCartModal()" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-11/12 md:w-auto bg-orange-500 text-white rounded-lg shadow-lg p-3 flex items-center justify-between gap-4 z-40 cursor-pointer hidden hover:bg-orange-600 transition-colors">
+        <div id="cart-float-btn" onclick="openCartModal()" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-11/12 md:w-auto bg-orange-500 text-white rounded-lg shadow-lg p-3 flex items-center justify-between gap-4 z-40 cursor-pointer hidden hover:bg-orange-600">
             <div class="flex items-center gap-3">
                 <div class="bg-white text-orange-500 font-bold rounded-md w-8 h-8 flex items-center justify-center" id="cart-count">
                     0
@@ -87,9 +82,8 @@
     <x-footer />
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
+        // AOS removed
 
         // Cart State
         let cart = [];
@@ -180,7 +174,7 @@
             countBadge.innerText = totalItems;
             if (totalItems > 0) {
                 btn.classList.remove('hidden');
-                btn.classList.add('animate-slide-in-up');
+                // Animation removed
             } else {
                 btn.classList.add('hidden');
             }
@@ -239,7 +233,7 @@
                             <div class="font-bold text-gray-700">
                                 Rp ${new Intl.NumberFormat('id-ID').format(item.price * item.quantity)}
                             </div>
-                            <button onclick="removeItemFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors" title="Hapus Item">
+                            <button onclick="removeItemFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50" title="Hapus Item">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>

@@ -6,14 +6,15 @@
     <title>{{ $settings['app_name'] ?? 'Chatalog' }} - Home</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     
     <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- AOS Animation CSS Removed -->
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -68,18 +69,15 @@
                             
                             <div class="absolute inset-0 bg-black opacity-40"></div>
 
-                            <div class="relative z-10 transition-opacity duration-500 max-w-lg mb-12 lg:ml-20 md:ml-10 ml-5">
-                                <h1 class="text-5xl md:text-6xl font-serif font-bold tracking-tight leading-tight mb-2 text-white"
-                                    data-aos="fade-down" data-aos-delay="500">
+                            <div class="relative z-10 max-w-lg mb-12 lg:ml-20 md:ml-10 ml-5">
+                                <h1 class="text-5xl md:text-6xl font-serif font-bold tracking-tight leading-tight mb-2 text-white">
                                     {{ $slide['title'] }}
                                 </h1>
-                                <p class="text-lg md:text-xl text-white"
-                                   data-aos="fade-up" data-aos-delay="700">
+                                <p class="text-lg md:text-xl text-white">
                                     {{ $slide['description'] }}
                                 </p>
                                 <a href="{{ url('/produk') }}"
-                                   class="mt-6 inline-block bg-orange-500 text-white text-lg font-semibold py-3 px-8 rounded-full hover:bg-orange-600 transition duration-300"
-                                   data-aos="zoom-in" data-aos-delay="900">
+                                   class="mt-6 inline-block bg-orange-500 text-white text-lg font-semibold py-3 px-8 rounded-full hover:bg-orange-600">
                                     Lihat Produk
                                 </a>
                             </div>
@@ -92,15 +90,15 @@
         <!-- --- SEKSI "KENAPA MEMILIH KAMI?" dengan ANIMASI --- -->
         <section class="bg-white py-20">
             <div class="container mx-auto px-6 text-center">
-                <!-- Judul Section - Fade Up -->
-                <h2 class="text-3xl font-bold text-gray-800 mb-4" data-aos="fade-up">
+                <!-- Judul Section -->
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">
                     {{ $settings['lp_section_title'] ?? 'Kenapa Memilih Kami?' }}
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-10">
 
                     <!-- POIN 1: BAHAN TERBAIK -->
-                    <div class="feature-item flex flex-col items-center" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="feature-item flex flex-col items-center">
                         <div class="bg-orange-100 text-orange-500 p-4 rounded-full mb-4">
                             <i class="fas fa-leaf text-3xl"></i>
                         </div>
@@ -109,7 +107,7 @@
                     </div>
 
                     <!-- POIN 2: DIBUAT PENUH CINTA -->
-                    <div class="feature-item flex flex-col items-center" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="feature-item flex flex-col items-center">
                         <div class="bg-orange-100 text-orange-500 p-4 rounded-full mb-4">
                             <i class="fas fa-heart text-3xl"></i>
                         </div>
@@ -118,7 +116,7 @@
                     </div>
 
                     <!-- POIN 3: JAMINAN KUALITAS -->
-                    <div class="feature-item flex flex-col items-center" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="feature-item flex flex-col items-center">
                         <div class="bg-orange-100 text-orange-500 p-4 rounded-full mb-4">
                             <i class="fas fa-shield-alt text-3xl"></i>
                         </div>
@@ -133,15 +131,13 @@
         <!-- --- SEKSI PENGHITUNG MITRA dengan ANIMASI --- -->
         <section id="partners-section" class="bg-orange-50 py-20 text-center">
             <div class="container mx-auto px-6">
-                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 mb-4"
-                     data-aos="fade-up">
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 mb-4">
 
                     <div class="text-gray-600 text-base md:text-lg font-normal text-right">
                         <p>Sebanyak</p>
                     </div>
 
-                    <div class="text-orange-500 text-6xl md:text-8xl font-bold tracking-tight"
-                         data-aos="zoom-in" data-aos-delay="200">
+                    <div class="text-orange-500 text-6xl md:text-8xl font-bold tracking-tight">
                         <span id="partners-count">0</span>
                     </div>
 
@@ -159,15 +155,15 @@
         <!-- --- SEKSI CALL TO ACTION dengan ANIMASI --- -->
         <section class="bg-white py-20">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4" data-aos="fade-down">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">
                     {{ $settings['lp_cta_title'] ?? 'Lihat Apa yang Kami Tawarkan' }}
                 </h2>
-                <p class="text-gray-600 max-w-2xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+                <p class="text-gray-600 max-w-2xl mx-auto mb-8">
                     {{ $settings['lp_cta_text'] ?? 'Jelajahi katalog lengkap kami.' }}
                 </p>
-                <div data-aos="zoom-in" data-aos-delay="200">
+                <div>
                     <a href="{{ url('/produk') }}"
-                       class="bg-orange-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-orange-600 transition-transform hover:scale-105 inline-block">
+                       class="bg-orange-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-orange-600 inline-block">
                         Lihat Semua Produk
                     </a>
                 </div>
@@ -181,61 +177,31 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
         $(document).ready(function(){
-            // Initialize AOS
-            AOS.init();
-
             // Initialize Slick Slider
             $('.hero-slider').slick({
                 dots: true,
                 infinite: true,
-                speed: 1000,
+                speed: 0,
                 slidesToShow: 1,
                 slidesToScroll: 1,
-                autoplay: true,
+                autoplay: false,
                 autoplaySpeed: 5000,
-                fade: true,
+                fade: false,
+                cssEase: 'linear',
                 arrows: true,
                 pauseOnHover: true,
                 prevArrow: '<button type="button" class="slick-prev text-white"><i class="fas fa-chevron-left"></i></button>',
                 nextArrow: '<button type="button" class="slick-next text-white"><i class="fas fa-chevron-right"></i></button>'
             });
 
-            // Partners Count Animation
+            // Partners Count (Static)
             const finalPartnersCount = 58;
-            let hasAnimated = false;
-            const partnersSection = document.getElementById('partners-section');
             const countElement = document.getElementById('partners-count');
-
-            const animateNumber = (start, end, element, duration) => {
-                let startTime = null;
-                const step = (currentTime) => {
-                    if (!startTime) startTime = currentTime;
-                    const progress = Math.min((currentTime - startTime) / duration, 1);
-                    const currentValue = Math.floor(progress * (end - start) + start);
-                    element.innerText = currentValue;
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    }
-                };
-                window.requestAnimationFrame(step);
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !hasAnimated) {
-                        animateNumber(0, finalPartnersCount, countElement, 2000);
-                        hasAnimated = true;
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            if (partnersSection) {
-                observer.observe(partnersSection);
+            if (countElement) {
+                countElement.innerText = finalPartnersCount;
             }
         });
     </script>

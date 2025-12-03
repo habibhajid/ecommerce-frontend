@@ -26,8 +26,8 @@ class ProductController extends Controller
         } catch (\Exception $e) {
         }
 
-        // Convert products array to object if view expects objects
-        $products = json_decode(json_encode($products)); 
+        // Keep products as array for consistency with view components
+        // $products = json_decode(json_encode($products)); 
 
         return view('products', compact('products', 'settings'));
     }
