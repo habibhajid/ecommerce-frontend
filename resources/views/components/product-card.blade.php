@@ -2,22 +2,33 @@
 
 @php
     $quantity = $cartItem ? $cartItem['quantity'] : 0;
-
-    // --- LOGIKA URL GAMBAR BARU UNTUK LOKAL IMAGE ---
-    $imageUrl = 'https://via.placeholder.com/400x400?text=No+Image'; // Default fallback
-
+    
+    // Default gambar
+    $imageUrl = 'https://via.placeholder.com/400x400?text=No+Image';
     if (!empty($product['image'])) {
-        if (Str::startsWith($product['image'], ['http://', 'https://'])) {
-            $imageUrl = $product['image'];
-        } elseif (Str::startsWith($product['image'], 'dummy_images')) {
-            // Ini untuk gambar dari seeder yang ada di folder public/dummy_images
-            $imageUrl = asset($product['image']);
+        $path = $product['image'];
+        
+        // 1. Hapus domain/IP jika ada
+        $path = str_replace(['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost', 'http://127.0.0.1'], '', $path);
+        
+        // 2. Hapus slash di depan
+        $path = ltrim($path, '/');
+        // 3. Tentukan Backend URL
+        $backendUrl = env('BACKEND_URL', 'http://127.0.0.1:8000');
+        // 4. Logika Final
+        if (strpos($path, 'dummy_images') !== false) {
+             // KASUS KHUSUS: Jika ada 'dummy_images', buang 'storage/' agar path-nya benar
+             $path = str_replace('storage/', '', $path);
+             $path = ltrim($path, '/'); // Bersihkan lagi slash depannya
+             $imageUrl = $backendUrl . '/' . $path;
+        } elseif (str_starts_with($path, 'storage')) {
+             // Jika file upload biasa yang sudah ada storage-nya
+             $imageUrl = $backendUrl . '/' . $path;
         } else {
-            // Ini untuk gambar yang diupload via admin (masuk ke storage)
-            $imageUrl = asset('storage/' . $product['image']);
+             // Jika nama file doang (belum ada storage)
+             $imageUrl = $backendUrl . '/storage/' . $path;
         }
     }
-    // --- AKHIR LOGIKA ---
 @endphp
 
 <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full 

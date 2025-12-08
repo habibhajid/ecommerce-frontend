@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $settings['app_name'] ?? 'Chatalog' }} - Home</title>
-    
-    <!-- Tailwind CSS -->
-    <!-- Tailwind CSS -->
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-    
-    <!-- AOS Animation CSS -->
-    <!-- AOS Animation CSS Removed -->
-    
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -57,9 +51,9 @@
                             } elseif (Str::startsWith($slide['image_url'], 'dummy_images')) {
                                 $imageUrl = asset($slide['image_url']);
                             } elseif (Str::startsWith($slide['image_url'], 'storage/')) {
-                                $imageUrl = asset($slide['image_url']);
+                                $imageUrl = env('BACKEND_URL') . '/' . $slide['image_url'];
                             } else {
-                                $imageUrl = asset('storage/' . $slide['image_url']);
+                                $imageUrl = env('BACKEND_URL') . '/' . $slide['image_url'];
                             }
                         }
                     @endphp
@@ -76,7 +70,7 @@
                                 <p class="text-lg md:text-xl text-white">
                                     {{ $slide['description'] }}
                                 </p>
-                                <a href="{{ url('/produk') }}"
+                                <a href="{{ url('/catalog') }}"
                                    class="mt-6 inline-block bg-orange-500 text-white text-lg font-semibold py-3 px-8 rounded-full hover:bg-orange-600">
                                     Lihat Produk
                                 </a>
@@ -187,9 +181,9 @@
                 speed: 0,
                 slidesToShow: 1,
                 slidesToScroll: 1,
-                autoplay: false,
+                autoplay: true,
                 autoplaySpeed: 5000,
-                fade: false,
+                fade: true,
                 cssEase: 'linear',
                 arrows: true,
                 pauseOnHover: true,

@@ -23,7 +23,7 @@
         <div class="absolute left-1/2 -translate-x-1/2">
             <a href="{{ url('/home') }}" class="flex items-center">
                 <img
-                    src="{{ asset('dummy_images/logo/Logo-Zoeliez-Ilux.png') }}"
+                    src="{{ env('BACKEND_URL') }}/storage/dummy_images/logo/Logo-Zoeliez-Ilux.png"
                     alt="Zoeliez Ilux Snack Ponorogo Logo"
                     class="h-16 w-auto"
                 />
