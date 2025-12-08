@@ -14,6 +14,7 @@ class HomeController extends Controller
         $slides = [];
 
         try {
+            $backendUrl = rtrim($backendUrl, '/');
             $response = Http::get("{$backendUrl}/api/settings");
             if ($response->successful()) {
                 $settings = $response->json();
@@ -68,6 +69,7 @@ class HomeController extends Controller
         $settings = [];
 
         try {
+            $backendUrl = rtrim($backendUrl, '/');
             $response = Http::get("{$backendUrl}/api/settings");
             if ($response->successful()) {
                 $settings = $response->json();
@@ -146,6 +148,7 @@ class HomeController extends Controller
         $backendUrl = env('BACKEND_URL');
         $settings = [];
         try {
+            $backendUrl = rtrim($backendUrl, '/');
             $response = Http::get("{$backendUrl}/api/settings");
             if ($response->successful()) {
                 $settings = $response->json();

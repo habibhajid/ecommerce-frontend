@@ -14,6 +14,7 @@ class ProductController extends Controller
         $settings = [];
 
         try {
+            $backendUrl = rtrim($backendUrl, '/');
             $productsResponse = Http::get("{$backendUrl}/api/products");
             if ($productsResponse->successful()) {
                 $products = $productsResponse->json();

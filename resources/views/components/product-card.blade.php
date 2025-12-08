@@ -3,35 +3,41 @@
 @php
     $quantity = $cartItem ? $cartItem['quantity'] : 0;
     
-    // Default gambar
-    $imageUrl = 'https://via.placeholder.com/400x400?text=No+Image';
+    // Default gambar fallback
+    $imageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect width="400" height="400" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23999"%3ENo Image%3C/text%3E%3C/svg%3E';
+
     if (!empty($product['image'])) {
-        $path = $product['image'];
-        
-        // 1. Hapus domain/IP jika ada
-        $path = str_replace(['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost', 'http://127.0.0.1'], '', $path);
-        
-        // 2. Hapus slash di depan
-        $path = ltrim($path, '/');
-        // 3. Tentukan Backend URL
-        $backendUrl = env('BACKEND_URL', 'http://127.0.0.1:8000');
-        // 4. Logika Final
-        if (strpos($path, 'dummy_images') !== false) {
-             // KASUS KHUSUS: Jika ada 'dummy_images', buang 'storage/' agar path-nya benar
-             $path = str_replace('storage/', '', $path);
-             $path = ltrim($path, '/'); // Bersihkan lagi slash depannya
+         $path = $product['image'];
+         $backendUrl = env('BACKEND_URL', 'http://127.0.0.1:8000');
+         
+         // Deteksi apakah ini file internal (dummy_images atau storage)
+         // Kita cek path-nya saja, abaikan domain yang mungkin salah dari backend
+         if (strpos($path, 'dummy_images') !== false || strpos($path, 'storage/') !== false) {
+             
+             // Ambil bagian path relatifnya saja
+             // Contoh: http://localhost/dummy_images/foo.jpg -> dummy_images/foo.jpg
+             if (strpos($path, 'dummy_images') !== false) {
+                 $path = substr($path, strpos($path, 'dummy_images'));
+             } elseif (strpos($path, 'storage/') !== false) {
+                 $path = substr($path, strpos($path, 'storage/'));
+             }
+             
+             // Gabungkan dengan Backend URL yang benar
              $imageUrl = $backendUrl . '/' . $path;
-        } elseif (str_starts_with($path, 'storage')) {
-             // Jika file upload biasa yang sudah ada storage-nya
-             $imageUrl = $backendUrl . '/' . $path;
-        } else {
-             // Jika nama file doang (belum ada storage)
-             $imageUrl = $backendUrl . '/storage/' . $path;
-        }
+             $imageUrl .= '?t=' . time(); // Cache buster
+             
+         } elseif (preg_match('/^https?:\/\//', $path)) {
+             // Jika URL eksternal (bukan dummy/storage), gunakan apa adanya
+             $imageUrl = $path;
+         } else {
+             // Jika path relatif murni tanpa domain, anggap storage
+             $imageUrl = $backendUrl . '/storage/' . ltrim($path, '/');
+             $imageUrl .= '?t=' . time();
+         }
     }
 @endphp
 
-<div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full 
+<div class="bg-white rounded-lg shadow-lg ossverflow-hidden flex flex-col h-full 
             transform hover:-translate-y-1 transition-transform duration-300
             w-full max-w-xs mx-auto min-w-0">
 
@@ -79,4 +85,3 @@
         </div>
     </div>
 </div>
-

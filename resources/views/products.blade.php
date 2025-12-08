@@ -7,11 +7,47 @@
     <title>{{ $settings['app_name'] ?? 'Chatalog' }} - Katalog Produk</title>
     
     <!-- Tailwind CSS -->
-    <!-- Tailwind CSS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Tailwind CSS (via CDN as requested to remove npm dependency) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            height: 400px; /* Adjust height as needed */
+        }
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slide-content {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+    </style>
     
     <!-- AOS Animation CSS -->
     <!-- AOS Animation CSS Removed -->
@@ -25,16 +61,62 @@
     <x-navbar />
 
     <!-- Header Section -->
-    <div class="bg-orange-50 py-12 text-black text-center">
-        <div class="container mx-auto px-4 max-w-screen-xl">
-            <h1 class="text-4xl font-bold">
-                Katalog Produk
-            </h1>
-            <p class="mt-2 text-lg">
-                Temukan dan pilih produk favorit Anda.
-            </p>
+    <!-- Landing Page Slider -->
+    @if(isset($settings['lp_slider_img1']) || isset($settings['lp_slider_img2']) || isset($settings['lp_slider_img3']))
+        <div class="slider-container">
+            <div class="slider-wrapper" id="hero-slider">
+                @foreach(['lp_slider_img1', 'lp_slider_img2', 'lp_slider_img3'] as $key)
+                    @if(!empty($settings[$key]))
+                        <div class="slide">
+                            <!-- Helper function or logic to handle full URL from accessor is already in Model, likely backend returns full URL if we use the API endpoint correctly. 
+                                 However, if $settings is just key-value from API, we might need to verify if backend API returns full URL. 
+                                 The SettingController in backend uses $item->value. 
+                                 Wait, the accessor `getValueAttribute` is on the Model instance. 
+                                 But in Controller `index` method: `Setting::all()->mapWithKeys(...)`. 
+                                 If we access `$item->value`, it triggers the accessor AUTOMATICALLY in Laravel model? 
+                                 YES, accessor format is get{Attribute}Attribute. 
+                                 So simple $settings[$key] should be the full URL. 
+                            -->
+                            <img src="{{ $settings[$key] }}" alt="Slider Image">
+                            <div class="slide-content">
+                                <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $settings['landing_page_headline'] ?? 'Selamat Datang' }}</h1>
+                                <p class="text-lg md:text-xl">{{ $settings['landing_page_tagline'] ?? '' }}</p>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
         </div>
-    </div>
+        
+        <script>
+            // Simple Auto Slider Script
+            document.addEventListener('DOMContentLoaded', function() {
+                const wrapper = document.getElementById('hero-slider');
+                if(!wrapper) return;
+                const slides = wrapper.children;
+                if(slides.length <= 1) return;
+                
+                let index = 0;
+                setInterval(() => {
+                    index++;
+                    if(index >= slides.length) index = 0;
+                    wrapper.style.transform = `translateX(-${index * 100}%)`;
+                }, 5000); // 5 seconds
+            });
+        </script>
+    @else
+        <!-- Fallback Static Header if no images -->
+        <div class="bg-orange-50 py-12 text-black text-center">
+            <div class="container mx-auto px-4 max-w-screen-xl">
+                <h1 class="text-4xl font-bold">
+                    {{ $settings['landing_page_headline'] ?? 'Katalog Produk' }}
+                </h1>
+                <p class="mt-2 text-lg">
+                    {{ $settings['landing_page_tagline'] ?? 'Temukan dan pilih produk favorit Anda.' }}
+                </p>
+            </div>
+        </div>
+    @endif
 
     <div class="container mx-auto px-4 py-12 max-w-screen-xl min-h-screen">
         <!-- Search Bar -->
@@ -287,7 +369,7 @@
                 items: cart.map(item => ({ id: item.id, quantity: item.quantity }))
             };
 
-            fetch('/api/checkout', {
+            fetch('{{ rtrim(env('BACKEND_URL'), '/') }}/api/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
