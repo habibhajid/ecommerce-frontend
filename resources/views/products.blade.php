@@ -98,7 +98,7 @@
                     index++;
                     if(index >= slides.length) index = 0;
                     wrapper.style.transform = `translateX(-${index * 100}%)`;
-                }, 5000); // 5 seconds
+                }, 60000); // 5 seconds
             });
         </script>
     @else
