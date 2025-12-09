@@ -1,4 +1,5 @@
 <!-- resources/views/components/product-modal.blade.php -->
+@props(['backendUrl'])
 <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4 hidden">
     <!-- Konten Modal -->
     <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
@@ -45,6 +46,8 @@
 </div>
 
 <script>
+    const backendUrl = @json($backendUrl);
+
     function openProductModal(product = null) {
         const modal = document.getElementById('product-modal');
         const title = document.getElementById('modal-title');
@@ -67,7 +70,7 @@
                  if (product.image.startsWith('http')) {
                     preview.src = product.image;
                 } else {
-                    preview.src = `/storage/${product.image}`;
+                    preview.src = `${backendUrl}/storage/${product.image}`;
                 }
             }
         } else {
@@ -103,16 +106,21 @@
 
         // Determine URL and Method
         // Note: For Laravel Update with FormData (file upload), we must use POST with _method: PUT
-        let url = '/api/admin/products';
+        // Determine URL and Method
+        // Note: For Laravel Update with FormData (file upload), we must use POST with _method: PUT
+        let url = `${backendUrl}/api/admin/products`;
         if (isEdit) {
-            url = `/api/admin/products/${productId}`;
+            url = `${backendUrl}/api/admin/products/${productId}`;
             formData.append('_method', 'PUT'); 
         }
 
         // Get CSRF token if available (though API might use Sanctum, web routes use CSRF)
         // Assuming this is used in a Blade view which has the meta tag
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        const headers = {};
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+        };
         if (csrfToken) {
             headers['X-CSRF-TOKEN'] = csrfToken;
         }

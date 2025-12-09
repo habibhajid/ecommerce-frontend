@@ -49,11 +49,8 @@
         }
     </style>
     
-    <!-- AOS Animation CSS -->
-    <!-- AOS Animation CSS Removed -->
-
+    <!-- Custom Style -->
     <style>
-        /* Animations removed */
     </style>
 </head>
 <body class="bg-white">
@@ -165,8 +162,6 @@
 
     <!-- Scripts -->
     <script>
-        // AOS removed
-
         // Cart State
         let cart = [];
 
@@ -256,7 +251,6 @@
             countBadge.innerText = totalItems;
             if (totalItems > 0) {
                 btn.classList.remove('hidden');
-                // Animation removed
             } else {
                 btn.classList.add('hidden');
             }

@@ -12,9 +12,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     
-    <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -69,12 +66,10 @@
                             <div class="absolute inset-0 bg-black opacity-40"></div>
 
                             <div class="relative z-10 transition-opacity duration-500 max-w-lg text-center">
-                                <h1 class="text-5xl md:text-6xl font-serif font-bold tracking-tight leading-tight mb-2 text-white"
-                                    data-aos="fade-down" data-aos-delay="500">
+                                <h1 class="text-5xl md:text-6xl font-serif font-bold tracking-tight leading-tight mb-2 text-white">
                                     {{ $slide['title'] }}
                                 </h1>
-                                <p class="text-lg md:text-xl text-white"
-                                   data-aos="fade-up" data-aos-delay="700">
+                                <p class="text-lg md:text-xl text-white">
                                     {{ $slide['description'] }}
                                 </p>
                             </div>
@@ -84,7 +79,7 @@
             </div>
         </header>
 
-        <!-- KONTEN CERITA dengan ANIMASI -->
+        <!-- KONTEN CERITA -->
         <div class="py-12 lg:py-20">
             <div class="container mx-auto px-6 max-w-6xl">
                 @foreach($storySections as $section)
@@ -112,20 +107,15 @@
                     @endphp
                     <div class="flex flex-col {{ $section['layout'] === 'image-left' ? 'lg:flex-row' : 'lg:flex-row-reverse' }} items-center gap-8 lg:gap-12 mb-16 lg:mb-24">
                         
-                        <!-- Gambar dengan animasi slide dari samping -->
-                        <div class="w-full lg:w-1/2 rounded-lg shadow-lg overflow-hidden flex-shrink-0"
-                             data-aos="{{ $section['layout'] === 'image-left' ? 'fade-right' : 'fade-left' }}"
-                             data-aos-duration="1000">
+                        <!-- Gambar -->
+                        <div class="w-full lg:w-1/2 rounded-lg shadow-lg overflow-hidden flex-shrink-0">
                             <img src="{{ $imageUrl }}"
                                  alt="{{ $section['imageAlt'] }}"
                                  class="w-full h-auto object-cover">
                         </div>
 
-                        <!-- Teks dengan animasi fade dari arah berlawanan -->
-                        <div class="w-full lg:w-1/2 text-center lg:text-left"
-                             data-aos="{{ $section['layout'] === 'image-left' ? 'fade-left' : 'fade-right' }}"
-                             data-aos-duration="1000"
-                             data-aos-delay="200">
+                        <!-- Teks -->
+                        <div class="w-full lg:w-1/2 text-center lg:text-left">
                             <h2 class="text-3xl font-semibold text-gray-800 mb-4">
                                 {{ $section['title'] }}
                             </h2>
@@ -145,13 +135,8 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
     <script>
         $(document).ready(function(){
-            // Initialize AOS
-            AOS.init();
-
             // Initialize Slick Slider
             $('.hero-slider').slick({
                 dots: true,

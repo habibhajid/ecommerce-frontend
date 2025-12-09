@@ -12,8 +12,6 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -26,7 +24,7 @@
 
     <div class="flex-grow flex items-center justify-center px-4 py-12">
         <!-- Kartu Form Login -->
-        <div class="w-full max-w-sm p-8 space-y-6 bg-white rounded-xl shadow-lg" data-aos="fade-up">
+        <div class="w-full max-w-sm p-8 space-y-6 bg-white rounded-xl shadow-lg">
             
             <!-- Header Form -->
             <div class="text-center">
@@ -89,9 +87,7 @@
     <x-footer />
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
 
         function handleLogin(event) {
             event.preventDefault();
@@ -106,7 +102,7 @@
             errorMsg.classList.add('hidden');
             errorMsg.innerText = '';
 
-            fetch('/api/login', {
+            fetch('{{ $backendUrl }}/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,8 +115,7 @@
                 if (status === 200 && body.token) {
                     localStorage.setItem('authToken', body.token);
                     // Redirect to Admin Dashboard
-                    // Since the dashboard route is /api/admin (returning a view), we redirect there.
-                    window.location.href = '/api/admin'; 
+                    window.location.href = '/admin'; 
                 } else {
                     throw new Error(body.message || 'Login gagal');
                 }

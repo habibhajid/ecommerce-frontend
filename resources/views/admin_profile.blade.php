@@ -12,8 +12,6 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
@@ -23,7 +21,7 @@
         <div class="container mx-auto px-6 py-8 flex-grow">
             <h1 class="text-3xl font-bold text-gray-800 mb-8">Profil Saya</h1>
             
-            <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md" data-aos="fade-up">
+            <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
                 <form onsubmit="handleUpdateProfile(event)" class="space-y-6">
                     <!-- Nama -->
                     <div>
@@ -70,9 +68,7 @@
     <x-footer />
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
 
         // Fetch Profile Data on Load
         document.addEventListener('DOMContentLoaded', () => {

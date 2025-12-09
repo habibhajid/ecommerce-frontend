@@ -5,17 +5,13 @@
         <div class="flex-1 flex items-center space-x-8 pl-8">
             <div class="hidden md:flex items-center space-x-6">
                 <a href="{{ url('/catalog') }}" class="text-gray-600 hover:text-orange-500">Produk</a>
-
-                @auth
-                    <a href="{{ url('/api/admin') }}" class="text-gray-600 hover:text-orange-500">Admin</a>
-                    <a href="{{ url('/contact') }}" class="text-gray-600 hover:text-orange-500">Kontak</a>
-                    <a href="{{ url('/about') }}" class="text-gray-600 hover:text-orange-500">Tentang</a>
-                @endauth
-
-                @guest
-                    <a href="{{ url('/about') }}" class="text-gray-600 hover:text-orange-500">Tentang Kami</a>
-                    <a href="{{ url('/contact') }}" class="text-gray-600 hover:text-orange-500">Kontak</a>
-                @endguest
+                <a href="{{ url('/about') }}" class="text-gray-600 hover:text-orange-500">Tentang Kami</a>
+                <a href="{{ url('/contact') }}" class="text-gray-600 hover:text-orange-500">Kontak</a>
+                
+                <!-- Admin Link (Hidden by default, shown via JS if admin) -->
+                <a id="nav-admin-link" href="{{ url('/admin') }}" class="text-orange-600 hover:text-orange-700 font-medium hidden">
+                    Admin
+                </a>
             </div>
         </div>
 
@@ -32,71 +28,44 @@
 
 
         <!-- Bagian Kanan Navbar (Tombol Profil/Login) -->
-        <div class="flex-1 flex justify-end relative">
-            @auth
-                <div class="relative">
-                    <button
-                        id="profile-menu-btn"
-                        class="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                    >
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </button>
-
-                    <!-- Menu Dropdown Profil -->
-                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 hidden">
-                        <div class="py-2">
-                            <a href="{{ url('/api/admin/profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">
-                                Pengaturan Profil
-                            </a>
-                            <button onclick="handleLogout()" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                Logout
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-            @endauth
+        <div class="flex-1 flex justify-end relative pr-8">
+             <!-- Logout Button (Hidden by default, shown via JS if admin) -->
+             <button id="nav-logout-btn" onclick="handleLogout()" class="flex items-center space-x-2 text-red-600 hover:text-red-700 font-medium hidden transition-colors duration-200 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-full">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
         </div>
     </div>
 </nav>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const profileBtn = document.getElementById('profile-menu-btn');
-        const profileMenu = document.getElementById('profile-menu');
+        const authToken = localStorage.getItem('authToken');
+        const adminLink = document.getElementById('nav-admin-link');
+        const logoutBtn = document.getElementById('nav-logout-btn');
 
-        if (profileBtn && profileMenu) {
-            // Toggle menu
-            profileBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileMenu.classList.toggle('hidden');
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
-                    profileMenu.classList.add('hidden');
-                }
-            });
+        if (authToken) {
+            // User is logged in (Admin)
+            if (adminLink) adminLink.classList.remove('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+        } else {
+            // User is Guest
+            if (adminLink) adminLink.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
         }
     });
 
     function handleLogout() {
-        fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(() => {
+        if(confirm('Apakah Anda yakin ingin logout?')) {
+            const authToken = localStorage.getItem('authToken');
+             // Optional: Call API to invalidate token on backend if needed
+             // fetch('/api/logout', ... ) 
+             
+            // Clear local storage
             localStorage.removeItem('authToken');
+            
+            // Redirect to home
             window.location.href = '/home';
-        })
-        .catch(err => {
-            console.error('Logout failed', err);
-            window.location.href = '/home';
-        });
+        }
     }
-
 </script>

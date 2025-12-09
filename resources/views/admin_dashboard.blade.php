@@ -11,19 +11,6 @@
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- AOS Animation CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <style>
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -32,14 +19,14 @@
     <!-- Protected Route Wrapper -->
     <x-protected-route>
         
-        <x-product-modal />
+        <x-product-modal :backendUrl="$backendUrl" />
 
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row md:space-x-8">
 
                 <!-- SIDEBAR -->
                 <aside class="w-full md:w-60 flex-shrink-0 mb-6 md:mb-0">
-                    <nav class="flex flex-col space-y-2 bg-white p-4 rounded-lg shadow-md sticky top-24" data-aos="fade-right">
+                    <nav class="flex flex-col space-y-2 bg-white p-4 rounded-lg shadow-md sticky top-24">
                         <button onclick="switchView('products')" id="nav-products" class="flex items-center space-x-3 w-full px-4 py-3 rounded-md font-medium text-sm transition-all duration-150 bg-orange-500 text-white shadow-md">
                             <i class="fas fa-cube h-5 w-5 flex items-center justify-center"></i>
                             <span>Manajemen Produk</span>
@@ -49,23 +36,7 @@
                             <span>Pengaturan Konten</span>
                         </button>
 
-                        <hr class="my-2 border-gray-200" />
 
-                        <div class="pt-2">
-                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide px-2 mb-2">Preview Halaman</p>
-                            <a href="/home" class="flex items-center space-x-3 w-full px-4 py-3 rounded-md font-medium text-sm transition-all duration-150 text-gray-600 hover:bg-gray-200 hover:text-gray-900">
-                                <i class="fas fa-home h-5 w-5 flex items-center justify-center"></i>
-                                <span>Homepage</span>
-                            </a>
-                            <a href="/about" class="flex items-center space-x-3 w-full px-4 py-3 rounded-md font-medium text-sm transition-all duration-150 text-gray-600 hover:bg-gray-200 hover:text-gray-900">
-                                <i class="fas fa-info-circle h-5 w-5 flex items-center justify-center"></i>
-                                <span>Tentang Kami</span>
-                            </a>
-                            <a href="/contact" class="flex items-center space-x-3 w-full px-4 py-3 rounded-md font-medium text-sm transition-all duration-150 text-gray-600 hover:bg-gray-200 hover:text-gray-900">
-                                <i class="fas fa-phone h-5 w-5 flex items-center justify-center"></i>
-                                <span>Kontak</span>
-                            </a>
-                        </div>
                     </nav>
                 </aside>
 
@@ -73,7 +44,7 @@
                 <main class="flex-1 min-w-0">
 
                     <!-- VIEW: PRODUCTS -->
-                    <section id="view-products" class="animate-fadeIn bg-white shadow-md rounded-lg overflow-hidden" data-aos="fade-left">
+                    <section id="view-products" class="bg-white shadow-md rounded-lg overflow-hidden">
                         <div class="flex justify-between items-center p-6 border-b border-gray-200">
                             <h2 class="text-xl font-semibold text-gray-700">Manajemen Produk</h2>
                             <button onclick="openProductModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-sm transition-colors duration-200">
@@ -101,7 +72,7 @@
                                                                 if (Str::startsWith($product->image, ['http', 'https'])) {
                                                                     $imgSrc = $product->image;
                                                                 } else {
-                                                                    $imgSrc = asset('storage/' . $product->image);
+                                                                    $imgSrc = $backendUrl . '/storage/' . $product->image;
                                                                 }
                                                             }
                                                         @endphp
@@ -133,7 +104,7 @@
                     </section>
 
                     <!-- VIEW: CONTENT SETTINGS -->
-                    <div id="view-content" class="animate-fadeIn space-y-8 hidden" data-aos="fade-left">
+                    <div id="view-content" class="space-y-8 hidden">
                         <form id="settings-form" onsubmit="handleSaveSettings(event)">
                             <!-- Card 1: Pengaturan Halaman Utama -->
                             <section class="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -169,7 +140,7 @@
                                                     @php
                                                         $previewUrl = 'https://via.placeholder.com/400x200?text=Pilih+Gambar';
                                                         if (!empty($settings[$key])) {
-                                                            $previewUrl = asset('storage/' . $settings[$key]);
+                                                            $previewUrl = $backendUrl . '/storage/' . $settings[$key];
                                                         }
                                                     @endphp
                                                     <img src="{{ $previewUrl }}" id="preview-{{ $key }}" class="w-full h-48 object-cover rounded-md mb-4">
@@ -282,9 +253,7 @@
     <x-footer />
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
 
         function switchView(viewName) {
             const productsView = document.getElementById('view-products');
@@ -315,10 +284,12 @@
 
         function deleteProduct(id) {
             if (confirm('Anda yakin ingin menghapus produk ini secara permanen?')) {
-                fetch(`/api/admin/products/${id}`, {
+                fetch(`{{ $backendUrl }}/api/admin/products/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                     }
                 })
                 .then(response => response.json())
@@ -362,11 +333,12 @@
             // Strategy: Send text settings first, then upload images.
             
             // 1. Update Text Settings
-            fetch('/api/settings', {
+            fetch('{{ $backendUrl }}/api/settings', {
                 method: 'POST', // Using POST with _method: PUT in body
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 },
                 body: formData
             })
@@ -383,10 +355,12 @@
                         imgData.append('image_key', input.name);
                         
                         imagePromises.push(
-                            fetch('/api/admin/settings/upload-image', {
+                            fetch('{{ $backendUrl }}/api/admin/settings/upload-image', {
                                 method: 'POST',
                                 headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    'Accept': 'application/json',
+                                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                                 },
                                 body: imgData
                             })
